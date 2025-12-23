@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Quick Pay</title>
-</head>
-<body style="display:flex;justify-content:center;align-items:center;height:100vh;">
+  <head>
+    <title>Redirecting to Payment…</title>
+  </head>
+  <body>
+    <form id="rzp-form">
+      <script
+        src="https://checkout.razorpay.com/v1/payment-button.js"
+        data-payment_button_id="pl_RutHOXnaBfaSL5"
+        async
+      ></script>
+    </form>
 
-<form>
-  <script 
-    src="https://checkout.razorpay.com/v1/payment-button.js"
-    data-payment_button_id="pl_RutHOXnaBfaSL5"
-    async>
-  </script>
-</form>
-
-</body>
+    <script>
+      const interval = setInterval(() => {
+        const btn = document.querySelector("button.razorpay-payment-button");
+        if (btn) {
+          btn.click();
+          clearInterval(interval);
+        }
+      }, 300);
+    </script>
+  </body>
 </html>
