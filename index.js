@@ -60,14 +60,14 @@ app.get("/", (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-  const { name, email, password, key } = req.body;
+  const { name, email, password, code } = req.body;
 
-  if (!name || !email || !password || !key) {
+  if (!name || !email || !password || !code) {
     return res.redirect("/?error=missing");
   }
 
   // Exclusive key check
-  if (key !== "a4abhijeet") {
+  if (code !== "a4abhijeet") {
     return res.redirect("/?error=key");
   }
 
