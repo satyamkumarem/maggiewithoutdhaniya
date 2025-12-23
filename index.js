@@ -16,6 +16,7 @@ mongoose
 const userSchema = new mongoose.Schema({
   name: String,
   email: { type: String, unique: true },
+  password: String,
   hasPaid: { type: Boolean, default: false },
   activeSessionId: String,
 });
@@ -62,27 +63,48 @@ app.get("/", (req, res) => {
 app.post("/login", async (req, res) => {
   const { name, email, password, key } = req.body;
 
-  if (!email || password !== "a4abhijeet" || key !== "a4abhijeet") {
-    return res.send("<h2>❌ Invalid Credentials</h2><a href='/'>Go Back</a>");
+  if (!name || !email || !password || !key) {
+    return res.send("<h2>❌ Missing fields</h2><a href='/'>Go Back</a>");
+  }
+
+  // Exclusive key check
+  if (key !== "a4abhijeet") {
+    return res.send("<h2>❌ Invalid Exclusive Key</h2><a href='/'>Go Back</a>");
   }
 
   let user = await User.findOne({ email });
 
+  // 🆕 First-time user → create account
   if (!user) {
-    user = await User.create({ name, email });
+    user = await User.create({
+      name,
+      email,
+      password, // ⚠️ stored as-is
+      hasPaid: false,
+    });
+  }
+  // 🔁 Existing user → verify password
+  else {
+    if (user.password !== password) {
+      return res.send("<h2>❌ Wrong Password</h2><a href='/'>Go Back</a>");
+    }
   }
 
+  // 🔐 Enforce single-device login
   user.activeSessionId = req.sessionID;
   await user.save();
 
+  // Attach session
   req.session.email = email;
 
+  // ✅ Skip payment if already paid
   if (user.hasPaid) {
     return res.redirect("/dashboard");
   }
 
   res.redirect("/pay");
 });
+
 
 app.get("/pay", requireLogin, async (req, res) => {
   const user = await User.findOne({ email: req.session.email });
