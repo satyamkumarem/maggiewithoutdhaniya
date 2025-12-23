@@ -35,7 +35,6 @@ app.use(
   })
 );
 
-
 async function requireLogin(req, res, next) {
   if (!req.session.email) return res.redirect("/");
   next();
@@ -64,12 +63,12 @@ app.post("/login", async (req, res) => {
   const { name, email, password, key } = req.body;
 
   if (!name || !email || !password || !key) {
-    return res.send("<h2>❌ Missing fields</h2><a href='/'>Go Back</a>");
+    return res.redirect("/?error=missing");
   }
 
   // Exclusive key check
   if (key !== "a4abhijeet") {
-    return res.send("<h2>❌ Invalid Exclusive Key</h2><a href='/'>Go Back</a>");
+    return res.redirect("/?error=key");
   }
 
   let user = await User.findOne({ email });
@@ -86,7 +85,7 @@ app.post("/login", async (req, res) => {
   // 🔁 Existing user → verify password
   else {
     if (user.password !== password) {
-      return res.send("<h2>❌ Wrong Password</h2><a href='/'>Go Back</a>");
+      return res.redirect("/?error=password");
     }
   }
 
@@ -99,66 +98,30 @@ app.post("/login", async (req, res) => {
 
   // ✅ Skip payment if already paid
   if (user.hasPaid) {
-    return res.redirect("/dashboard");
+    return res.redirect("https://meet.google.com/hdi-gcqr-ufm");
   }
 
   res.redirect("/pay");
 });
 
-
 app.get("/pay", requireLogin, async (req, res) => {
   const user = await User.findOne({ email: req.session.email });
-  if (user.hasPaid) return res.redirect("/dashboard");
+  if (user.hasPaid) return res.redirect("https://meet.google.com/hdi-gcqr-ufm");
 
   res.sendFile(path.join(__dirname, "views", "pay.html"));
 });
 
 app.post("/payment-success", requireLogin, async (req, res) => {
   await User.updateOne({ email: req.session.email }, { hasPaid: true });
-  res.redirect("/dashboard");
+  res.redirect("https://meet.google.com/hdi-gcqr-ufm");
 });
 
-// Dashboard
-app.get(
-  "/dashboard",
-  requireLogin,
-  requirePayment,
-  enforceSingleSession,
-  (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "dashboard.html"));
-  }
-);
-
-// Protected Pages
-app.get(
-  "/pdf",
-  requireLogin,
-  requirePayment,
-  enforceSingleSession,
-  (req, res) => res.sendFile(path.join(__dirname, "views", "pdf.html"))
-);
-
-app.get(
-  "/mcq",
-  requireLogin,
-  requirePayment,
-  enforceSingleSession,
-  (req, res) => res.sendFile(path.join(__dirname, "views", "mcq.html"))
-);
-
-app.get(
-  "/live",
-  requireLogin,
-  requirePayment,
-  enforceSingleSession,
-  (req, res) => res.sendFile(path.join(__dirname, "views", "live.html"))
-);
-
-// Logout
 app.get("/logout", (req, res) => {
   req.session.destroy(() => res.redirect("/"));
 });
 
 app.listen(PORT, () =>
-  console.log(`🚀 Server running at https://maggiewithoutdhaniya.up.railway.app`)
+  console.log(
+    `🚀 Server running at https://maggiewithoutdhaniya.up.railway.app`
+  )
 );

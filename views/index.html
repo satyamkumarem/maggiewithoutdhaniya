@@ -1,80 +1,152 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <!-- Basic SEO -->
-    <title>Unlock Live Session | Quick Pay</title>
-    <meta
-      name="description"
-      content="Instant access to live session with quick and secure payment. Pay once and join immediately using UPI or Google Pay."
-    />
-
-    <meta property="og:title" content="Unlock Live Session | Quick Pay" />
-    <meta
-      property="og:description"
-      content="Join the live session instantly with secure and fast payment."
-    />
-    <meta
-      property="og:image"
-      content="https://maggiewithoutdhaniya.up.railway.app/images/thumbnail.png"
-    />
-    <meta
-      property="og:url"
-      content="https://maggiewithoutdhaniya.up.railway.app/"
-    />
-    <meta property="og:type" content="website" />
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Unlock Live Session | Quick Pay" />
-    <meta
-      name="twitter:description"
-      content="Quick payment to unlock live session access instantly."
-    />
-    <meta
-      name="twitter:image"
-      content="https://maggiewithoutdhaniya.up.railway.app/images/thumbnail.png"
-    />
-
-    <!-- Mobile -->
+    <meta charset="UTF-8" />
+    <title>Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0a7cff" />
 
     <style>
+      * {
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, sans-serif;
+      }
+
       body {
-        font-family: Arial;
-        background: #f2f2f2;
+        margin: 0;
+        min-height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        background: linear-gradient(#eaf3fb, #dde8f3);
       }
-      form {
-        background: white;
-        padding: 20px;
+
+      .container {
+        width: 100%;
+        max-width: 1500px;
+        height: 700px;
+        background: #ffffff;
+        border-radius: 18px;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        display: flex;
+        overflow: hidden;
+      }
+
+      .left {
+        flex: 1.5;
+        background: url("/images/wallpaper.png") no-repeat center;
+        background-size: cover;
+      }
+
+      .right {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+      }
+
+      .login-box {
+        width: 100%;
+        max-width: 360px;
+      }
+
+      .login-box h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        letter-spacing: 2px;
+        color: #222;
+      }
+
+      label {
+        font-size: 14px;
+        color: #666;
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      input {
+        width: 100%;
+        padding: 12px 14px;
+        margin-bottom: 18px;
         border-radius: 8px;
-        width: 300px;
+        border: 1px solid #ccc;
+        font-size: 14px;
       }
-      input,
+
+      input:focus {
+        outline: none;
+        border-color: #8bb3e8;
+      }
+
       button {
         width: 100%;
-        padding: 10px;
-        margin-top: 10px;
-      }
-      button {
-        background: #0a7cff;
-        color: white;
+        padding: 12px;
+        border-radius: 8px;
         border: none;
+        background: #c9dcef;
+        color: #2c3e50;
+        font-size: 15px;
         cursor: pointer;
+        transition: 0.3s;
+      }
+
+      button:hover {
+        background: #b2cbe6;
+      }
+
+      /* MOBILE */
+      @media (max-width: 900px) {
+        .left {
+          display: none;
+        }
+        .container {
+          height: auto;
+        }
       }
     </style>
   </head>
+
   <body>
-    <form method="POST" action="/login">
-      <input name="name" placeholder="Name" required />
-      <input name="email" type="email" placeholder="Email" required />
-      <input name="password" type="password" placeholder="Password" required />
-      <input name="key" placeholder="Exclusive Key" required />
-      <button type="submit">Continue</button>
-    </form>
+    <div class="container">
+      <div class="left"></div>
+
+      <div class="right">
+        <div class="login-box">
+          <h2>Let's go</h2>
+
+          <form method="POST" action="/login">
+            <label>Name</label>
+            <input type="text" name="name" required />
+
+            <label>Email</label>
+            <input type="email" name="email" required />
+
+            <label>Password</label>
+            <input type="password" name="password" required />
+
+            <label>Invite Code</label>
+            <input type="text" name="code" required />
+
+            <button type="submit">Join</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const error = params.get("error");
+
+      if (error === "missing") {
+        alert("Please fill all required fields");
+      } else if (error === "key") {
+        alert("Invalid exclusive key");
+      } else if (error === "password") {
+        alert("Wrong password");
+      }
+
+      if (error) {
+        window.history.replaceState({}, document.title, "/");
+      }
+    </script>
   </body>
 </html>
