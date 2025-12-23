@@ -8,7 +8,6 @@
       content="Instant access to live session with quick and secure payment. Pay once and join immediately using UPI or Google Pay."
     />
 
-    <!-- Open Graph (WhatsApp, Telegram, Facebook, LinkedIn) -->
     <meta property="og:title" content="Unlock Live Session | Quick Pay" />
     <meta
       property="og:description"
@@ -71,8 +70,10 @@
   </head>
   <body>
     <form method="POST" action="/login">
-      <h2>Unlock Live Session</h2>
-      <input type="password" name="password" placeholder="Password" required />
+      <input name="name" placeholder="Name" required />
+      <input name="email" type="email" placeholder="Email" required />
+      <input name="password" type="password" placeholder="Password" required />
+      <input name="key" placeholder="Exclusive Key" required />
       <button type="submit">Continue</button>
     </form>
   </body>
