@@ -1,25 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Redirecting to Payment…</title>
-  </head>
-  <body>
-    <form id="rzp-form">
-      <script
-        src="https://checkout.razorpay.com/v1/payment-button.js"
-        data-payment_button_id="pl_RutHOXnaBfaSL5"
-        async
-      ></script>
-    </form>
+    <meta charset="UTF-8" />
+    <title>Continue to Payment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <script>
-      const interval = setInterval(() => {
-        const btn = document.querySelector("button.razorpay-payment-button");
-        if (btn) {
-          btn.click();
-          clearInterval(interval);
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        background: #f0f4f9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+      }
+
+      /* Overlay */
+      .overlay {
+        position: fixed;
+        inset: 0;
+        /* background: rgba(0, 0, 0, 0.45); */
+        background: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* Popup */
+      .popup {
+        background: #ffffff;
+        padding: 30px 28px;
+        border-radius: 14px;
+        width: 90%;
+        max-width: 380px;
+        text-align: center;
+        /* box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2); */
+      }
+
+      .popup h2 {
+        margin: 0 0 10px;
+        font-size: 22px;
+        color: #222;
+      }
+
+      .popup p {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      /* Razorpay button container */
+      .rzp-container {
+        display: flex;
+        justify-content: center;
+      }
+
+      /* Mobile optimization */
+      @media (max-width: 480px) {
+        .popup {
+          padding: 24px 20px;
         }
-      }, 300);
-    </script>
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="overlay">
+      <div class="popup">
+        <h2>Complete Your Payment</h2>
+        <p>Click below to proceed to the secure payment gateway</p>
+
+        <div class="rzp-container">
+          <form>
+            <script
+              src="https://checkout.razorpay.com/v1/payment-button.js"
+              data-payment_button_id="pl_RutHOXnaBfaSL5"
+              async
+            ></script>
+          </form>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
