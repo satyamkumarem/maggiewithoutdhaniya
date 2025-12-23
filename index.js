@@ -111,7 +111,7 @@ app.get("/pay", requireLogin, async (req, res) => {
   res.sendFile(path.join(__dirname, "views", "pay.html"));
 });
 
-app.post("/payment-success", requireLogin, async (req, res) => {
+app.get("/payment-success", requireLogin, async (req, res) => {
   await User.updateOne({ email: req.session.email }, { hasPaid: true });
   res.redirect("https://meet.google.com/hdi-gcqr-ufm");
 });
